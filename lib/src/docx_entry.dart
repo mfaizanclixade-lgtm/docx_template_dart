@@ -23,11 +23,7 @@ abstract class DocxEntry {
   void _updateArchive(Archive arch);
 
   void _updateData(Archive arch, List<int> data) {
-    if (_index < 0) {
-      arch.addFile(ArchiveFile(_name, data.length, data));
-    } else {
-      arch.files[_index] = ArchiveFile(_name, data.length, data);
-    }
+    arch.addFile(ArchiveFile(_name, data.length, data));
   }
 }
 
@@ -83,10 +79,12 @@ class DocxRelsEntry extends DocxXmlEntry {
   }
 
   DocxRel? getRel(String id) {
-    final el = _rels.descendants.firstWhereOrNull((e) =>
-        e is XmlElement &&
-        e.name.local == 'Relationship' &&
-        e.getAttribute('Id') == id);
+    final el = _rels.descendants.firstWhereOrNull(
+      (e) =>
+          e is XmlElement &&
+          e.name.local == 'Relationship' &&
+          e.getAttribute('Id') == id,
+    );
     if (el != null) {
       final type = el.getAttribute('Type');
       final target = el.getAttribute('Target');
@@ -103,10 +101,12 @@ class DocxRelsEntry extends DocxXmlEntry {
   }
 
   void update(String id, DocxRel rel) {
-    final el = _rels.descendants.firstWhereOrNull((e) =>
-        e is XmlElement &&
-        e.name.local == 'Relationship' &&
-        e.getAttribute('Id') == id);
+    final el = _rels.descendants.firstWhereOrNull(
+      (e) =>
+          e is XmlElement &&
+          e.name.local == 'Relationship' &&
+          e.getAttribute('Id') == id,
+    );
     if (el != null) {
       el.setAttribute('Type', rel.type);
       el.setAttribute('Target', rel.target);
